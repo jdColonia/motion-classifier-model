@@ -1,0 +1,579 @@
+{
+  "devolverse": [
+    {
+      "video_file": "devolverse 1.mp4",
+      "total_frames": 153,
+      "frames_with_pose": 153,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 1_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 1_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "devolverse 2.mp4",
+      "total_frames": 106,
+      "frames_with_pose": 88,
+      "detection_rate": 83.01886792452831,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 2_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 2_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "devolverse 3.mp4",
+      "total_frames": 88,
+      "frames_with_pose": 71,
+      "detection_rate": 80.68181818181817,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 3_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 3_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "devolverse 4.mp4",
+      "total_frames": 82,
+      "frames_with_pose": 81,
+      "detection_rate": 98.78048780487805,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 4_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 4_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "devolverse 5.mp4",
+      "total_frames": 63,
+      "frames_with_pose": 60,
+      "detection_rate": 95.23809523809523,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 5_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 5_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "devolverse 6.mp4",
+      "total_frames": 64,
+      "frames_with_pose": 55,
+      "detection_rate": 85.9375,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 6_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 6_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "devolverse 7.mp4",
+      "total_frames": 91,
+      "frames_with_pose": 88,
+      "detection_rate": 96.7032967032967,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 7_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\devolverse\\devolverse 7_poses.csv",
+      "status": "success"
+    }
+  ],
+  "ir al frente": [
+    {
+      "video_file": "al frente 4.mp4",
+      "total_frames": 82,
+      "frames_with_pose": 82,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 4_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 4_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "al frente 5.mp4",
+      "total_frames": 107,
+      "frames_with_pose": 105,
+      "detection_rate": 98.13084112149532,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 5_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 5_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "al frente 6.mp4",
+      "total_frames": 115,
+      "frames_with_pose": 112,
+      "detection_rate": 97.3913043478261,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 6_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 6_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "al frente 7.mp4",
+      "total_frames": 93,
+      "frames_with_pose": 87,
+      "detection_rate": 93.54838709677419,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 7_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 7_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "al frente 8.mp4",
+      "total_frames": 128,
+      "frames_with_pose": 125,
+      "detection_rate": 97.65625,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 8_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\al frente 8_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "frente 1.mp4",
+      "total_frames": 133,
+      "frames_with_pose": 116,
+      "detection_rate": 87.21804511278195,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\frente 1_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\frente 1_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "frente 2.mp4",
+      "total_frames": 91,
+      "frames_with_pose": 84,
+      "detection_rate": 92.3076923076923,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\frente 2_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\frente 2_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "frente 3.mp4",
+      "total_frames": 91,
+      "frames_with_pose": 91,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\frente 3_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\ir al frente\\frente 3_poses.csv",
+      "status": "success"
+    }
+  ],
+  "parar": [
+    {
+      "video_file": "pararse 1.mp4",
+      "total_frames": 82,
+      "frames_with_pose": 81,
+      "detection_rate": 98.78048780487805,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 1_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 1_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 10.mp4",
+      "total_frames": 61,
+      "frames_with_pose": 61,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 10_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 10_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 11.mp4",
+      "total_frames": 62,
+      "frames_with_pose": 62,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 11_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 11_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 12.mp4",
+      "total_frames": 76,
+      "frames_with_pose": 76,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 12_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 12_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 2.mp4",
+      "total_frames": 72,
+      "frames_with_pose": 72,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 2_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 2_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 3.mp4",
+      "total_frames": 113,
+      "frames_with_pose": 112,
+      "detection_rate": 99.11504424778761,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 3_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 3_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 4.mp4",
+      "total_frames": 95,
+      "frames_with_pose": 94,
+      "detection_rate": 98.94736842105263,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 4_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 4_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 5.mp4",
+      "total_frames": 115,
+      "frames_with_pose": 115,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 5_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 5_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 6.mp4",
+      "total_frames": 80,
+      "frames_with_pose": 80,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 6_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 6_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 7.mp4",
+      "total_frames": 89,
+      "frames_with_pose": 89,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 7_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 7_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 8.mp4",
+      "total_frames": 87,
+      "frames_with_pose": 87,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 8_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 8_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "pararse 9.mp4",
+      "total_frames": 73,
+      "frames_with_pose": 73,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 9_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\parar\\pararse 9_poses.csv",
+      "status": "success"
+    }
+  ],
+  "sentar": [
+    {
+      "video_file": "sentar 1.mp4",
+      "total_frames": 123,
+      "frames_with_pose": 122,
+      "detection_rate": 99.1869918699187,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 1_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 1_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 10.mp4",
+      "total_frames": 74,
+      "frames_with_pose": 74,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 10_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 10_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 11.mp4",
+      "total_frames": 102,
+      "frames_with_pose": 102,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 11_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 11_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 12.mp4",
+      "total_frames": 77,
+      "frames_with_pose": 76,
+      "detection_rate": 98.7012987012987,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 12_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 12_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 13.mp4",
+      "total_frames": 73,
+      "frames_with_pose": 72,
+      "detection_rate": 98.63013698630137,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 13_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 13_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 14.mp4",
+      "total_frames": 83,
+      "frames_with_pose": 83,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 14_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 14_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 15.mp4",
+      "total_frames": 106,
+      "frames_with_pose": 105,
+      "detection_rate": 99.05660377358491,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 15_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 15_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 2.mp4",
+      "total_frames": 76,
+      "frames_with_pose": 76,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 2_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 2_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 3.mp4",
+      "total_frames": 170,
+      "frames_with_pose": 169,
+      "detection_rate": 99.41176470588235,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 3_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 3_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 4.mp4",
+      "total_frames": 80,
+      "frames_with_pose": 80,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 4_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 4_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 5.mp4",
+      "total_frames": 159,
+      "frames_with_pose": 156,
+      "detection_rate": 98.11320754716981,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 5_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 5_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 6.mp4",
+      "total_frames": 94,
+      "frames_with_pose": 93,
+      "detection_rate": 98.93617021276596,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 6_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 6_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 7.mp4",
+      "total_frames": 59,
+      "frames_with_pose": 58,
+      "detection_rate": 98.30508474576271,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 7_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 7_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 8.mp4",
+      "total_frames": 149,
+      "frames_with_pose": 148,
+      "detection_rate": 99.32885906040269,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 8_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 8_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "sentar 9.mp4",
+      "total_frames": 104,
+      "frames_with_pose": 103,
+      "detection_rate": 99.03846153846155,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 9_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\sentar\\sentar 9_poses.csv",
+      "status": "success"
+    }
+  ],
+  "voltear": [
+    {
+      "video_file": "voltear 1.mp4",
+      "total_frames": 99,
+      "frames_with_pose": 99,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 1_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 1_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 10.mp4",
+      "total_frames": 96,
+      "frames_with_pose": 95,
+      "detection_rate": 98.95833333333334,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 10_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 10_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 11.mp4",
+      "total_frames": 95,
+      "frames_with_pose": 95,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 11_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 11_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 12.mp4",
+      "total_frames": 45,
+      "frames_with_pose": 45,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 12_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 12_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 13.mp4",
+      "total_frames": 41,
+      "frames_with_pose": 41,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 13_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 13_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 14.mp4",
+      "total_frames": 40,
+      "frames_with_pose": 25,
+      "detection_rate": 62.5,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 14_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 14_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 15.mp4",
+      "total_frames": 47,
+      "frames_with_pose": 47,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 15_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 15_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 16.mp4",
+      "total_frames": 55,
+      "frames_with_pose": 52,
+      "detection_rate": 94.54545454545455,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 16_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 16_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 17.mp4",
+      "total_frames": 45,
+      "frames_with_pose": 44,
+      "detection_rate": 97.77777777777777,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 17_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 17_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 18.mp4",
+      "total_frames": 44,
+      "frames_with_pose": 41,
+      "detection_rate": 93.18181818181817,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 18_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 18_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 19.mp4",
+      "total_frames": 55,
+      "frames_with_pose": 54,
+      "detection_rate": 98.18181818181819,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 19_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 19_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 2.mp4",
+      "total_frames": 109,
+      "frames_with_pose": 109,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 2_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 2_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 20.mp4",
+      "total_frames": 61,
+      "frames_with_pose": 39,
+      "detection_rate": 63.934426229508205,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 20_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 20_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 21.mp4",
+      "total_frames": 64,
+      "frames_with_pose": 63,
+      "detection_rate": 98.4375,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 21_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 21_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 3.mp4",
+      "total_frames": 101,
+      "frames_with_pose": 101,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 3_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 3_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 4.mp4",
+      "total_frames": 136,
+      "frames_with_pose": 136,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 4_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 4_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 5.mp4",
+      "total_frames": 109,
+      "frames_with_pose": 109,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 5_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 5_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 6.mp4",
+      "total_frames": 102,
+      "frames_with_pose": 102,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 6_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 6_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 7.mp4",
+      "total_frames": 81,
+      "frames_with_pose": 81,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 7_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 7_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 8.mp4",
+      "total_frames": 115,
+      "frames_with_pose": 115,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 8_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 8_poses.csv",
+      "status": "success"
+    },
+    {
+      "video_file": "voltear 9.mp4",
+      "total_frames": 103,
+      "frames_with_pose": 103,
+      "detection_rate": 100.0,
+      "json_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 9_poses.json",
+      "csv_path": "C:/Users/13mig/Documents/Semestre 7/IA/motion-classifier-model/data/processed\\voltear\\voltear 9_poses.csv",
+      "status": "success"
+    }
+  ]
+}
