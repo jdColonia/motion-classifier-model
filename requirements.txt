@@ -1,0 +1,19 @@
+# Dependencias del proyecto Motion Classifier Model
+# Este archivo contiene todas las dependencias de Python necesarias para ejecutar el proyecto
+
+# Procesamiento de video y visión por computadora
+mediapipe
+opencv-python
+
+# Manipulación y análisis de datos
+pandas
+numpy
+
+# Barra de progreso para procesamiento de videos
+tqdm
+
+
+# Para machine learning
+# scikit-learn
+# tensorflow
+# torch

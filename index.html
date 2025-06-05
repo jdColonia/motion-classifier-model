@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detector de Poses en Tiempo Real</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Detector de Poses Corporales</h1>
+        <p>Detección de landmarks en tiempo real usando MediaPipe</p>
+      </header>
+
+      <main>
+        <div class="video-container">
+          <video id="input_video" autoplay muted playsinline></video>
+          <canvas id="output_canvas"></canvas>
+        </div>
+
+        <div class="controls">
+          <button id="start-btn" class="btn btn-primary">Iniciar Cámara</button>
+          <button id="stop-btn" class="btn btn-secondary" disabled>
+            Detener Cámara
+          </button>
+          <div class="toggle-container">
+            <label for="show-landmarks">
+              <input type="checkbox" id="show-landmarks" checked />
+              Mostrar Landmarks
+            </label>
+          </div>
+        </div>
+
+        <div class="info">
+          <div class="status">
+            <span id="status">Estado: Desconectado</span>
+          </div>
+          <div class="fps">
+            <span id="fps">FPS: 0</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MediaPipe -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Script principal -->
+    <script src="script.js"></script>
+  </body>
+</html>
