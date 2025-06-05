@@ -6,6 +6,12 @@ let showLandmarks = true;
 let fpsCounter = 0;
 let lastTime = performance.now();
 
+// Variables para clasificación de movimientos
+let isModelAvailable = false;
+let currentPrediction = null;
+let predictionHistory = [];
+let lastPredictionTime = 0;
+
 // Elementos del DOM
 const videoElement = document.getElementById("input_video");
 const canvasElement = document.getElementById("output_canvas");
@@ -15,6 +21,8 @@ const stopBtn = document.getElementById("stop-btn");
 const statusElement = document.getElementById("status");
 const fpsElement = document.getElementById("fps");
 const showLandmarksCheckbox = document.getElementById("show-landmarks");
+const predictionElement = document.getElementById("prediction");
+const confidenceElement = document.getElementById("confidence");
 
 // Configuración de MediaPipe Pose
 const poseConfig = {
@@ -27,6 +35,9 @@ const poseConfig = {
 async function initializeApp() {
   try {
     updateStatus("Inicializando...", "loading");
+
+    // Verificar disponibilidad de la API del modelo
+    await checkModelAPI();
 
     // Inicializar MediaPipe Pose
     pose = new Pose(poseConfig);
@@ -66,6 +77,11 @@ function onResults(results) {
   if (showLandmarks && results.poseLandmarks) {
     drawPoseLandmarks(results.poseLandmarks);
     drawPoseConnections(results.poseLandmarks);
+  }
+
+  // Clasificar movimiento si el modelo está disponible
+  if (isModelAvailable && results.poseLandmarks) {
+    classifyMovement(results.poseLandmarks);
   }
 
   canvasCtx.restore();
@@ -317,4 +333,155 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", checkBrowserSupport);
 } else {
   checkBrowserSupport();
+}
+
+// ========== FUNCIONES DE CLASIFICACIÓN DE MOVIMIENTOS ==========
+
+// Verificar disponibilidad de la API del modelo
+async function checkModelAPI() {
+  const modelStatusElement = document.getElementById("model-status");
+  
+  try {
+    const response = await fetch("http://localhost:5000/health");
+    if (response.ok) {
+      const data = await response.json();
+      isModelAvailable = data.model_loaded;
+      
+      if (isModelAvailable) {
+        modelStatusElement.textContent = `Modelo: ${data.model_info?.name || 'Cargado'} ✅`;
+        modelStatusElement.parentElement.className = "model-status available";
+        console.log("✅ API del modelo disponible:", data);
+      } else {
+        modelStatusElement.textContent = "Modelo: Error de carga ❌";
+        modelStatusElement.parentElement.className = "model-status unavailable";
+      }
+      return isModelAvailable;
+    }
+  } catch (error) {
+    console.log("⚠️ API del modelo no disponible:", error.message);
+  }
+  
+  isModelAvailable = false;
+  modelStatusElement.textContent = "Modelo: No disponible ❌";
+  modelStatusElement.parentElement.className = "model-status unavailable";
+  return false;
+}
+
+// Clasificar movimiento usando la API
+async function classifyMovement(landmarks) {
+  // Limitar frecuencia de predicciones (máximo cada 500ms)
+  const now = Date.now();
+  if (now - lastPredictionTime < 500) {
+    return;
+  }
+  lastPredictionTime = now;
+
+  try {
+    // Preparar datos de landmarks
+    const landmarksData = landmarks.map((landmark, index) => ({
+      x: landmark.x,
+      y: landmark.y,
+      z: landmark.z,
+      visibility: landmark.visibility
+    }));
+
+    // Enviar a la API
+    const response = await fetch("http://localhost:5000/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        landmarks: landmarksData
+      })
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      updatePrediction(result);
+    } else {
+      console.error("Error en predicción:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error clasificando movimiento:", error);
+  }
+}
+
+// Actualizar la predicción mostrada
+function updatePrediction(result) {
+  if (result.error) {
+    console.error("Error del modelo:", result.error);
+    return;
+  }
+
+  currentPrediction = result;
+  
+  // Agregar a historial
+  predictionHistory.push({
+    prediction: result.prediction,
+    confidence: result.confidence,
+    timestamp: Date.now()
+  });
+
+  // Mantener solo las últimas 10 predicciones
+  if (predictionHistory.length > 10) {
+    predictionHistory.shift();
+  }
+
+  // Mostrar predicción en el canvas
+  displayPredictionOnCanvas(result);
+}
+
+// Mostrar predicción en el canvas
+function displayPredictionOnCanvas(result) {
+  if (!canvasCtx || !result) return;
+
+  // Configurar estilo del texto
+  canvasCtx.font = "bold 24px Arial";
+  canvasCtx.fillStyle = "#FFFFFF";
+  canvasCtx.strokeStyle = "#000000";
+  canvasCtx.lineWidth = 3;
+
+  // Texto de la predicción
+  const predictionText = `Movimiento: ${result.prediction}`;
+  const confidenceText = `Confianza: ${(result.confidence * 100).toFixed(1)}%`;
+
+  // Posición del texto
+  const x = 20;
+  const y = 40;
+
+  // Dibujar fondo semi-transparente
+  canvasCtx.fillStyle = "rgba(0, 0, 0, 0.7)";
+  canvasCtx.fillRect(10, 10, 350, 80);
+
+  // Dibujar texto con borde
+  canvasCtx.fillStyle = "#FFFFFF";
+  canvasCtx.strokeText(predictionText, x, y);
+  canvasCtx.fillText(predictionText, x, y);
+  
+  canvasCtx.strokeText(confidenceText, x, y + 30);
+  canvasCtx.fillText(confidenceText, x, y + 30);
+
+  // Cambiar color según confianza
+  const confidence = result.confidence;
+  if (confidence > 0.8) {
+    canvasCtx.fillStyle = "#00FF00"; // Verde para alta confianza
+  } else if (confidence > 0.6) {
+    canvasCtx.fillStyle = "#FFFF00"; // Amarillo para confianza media
+  } else {
+    canvasCtx.fillStyle = "#FF6600"; // Naranja para baja confianza
+  }
+
+  // Barra de confianza
+  const barWidth = 200;
+  const barHeight = 10;
+  const barX = x;
+  const barY = y + 40;
+
+  // Fondo de la barra
+  canvasCtx.fillStyle = "rgba(255, 255, 255, 0.3)";
+  canvasCtx.fillRect(barX, barY, barWidth, barHeight);
+
+  // Barra de progreso
+  canvasCtx.fillRect(barX, barY, barWidth * confidence, barHeight);
 }

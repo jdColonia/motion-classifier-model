@@ -155,7 +155,8 @@ header p {
 }
 
 .status,
-.fps {
+.fps,
+.model-status {
   background: white;
   padding: 12px 20px;
   border-radius: var(--border-radius);
@@ -169,6 +170,18 @@ header p {
 
 .fps span {
   color: var(--primary-color);
+}
+
+.model-status span {
+  color: var(--secondary-color);
+}
+
+.model-status.available span {
+  color: var(--success-color);
+}
+
+.model-status.unavailable span {
+  color: var(--danger-color);
 }
 
 /* Estados dinámicos */
@@ -206,7 +219,8 @@ header p {
   }
 
   .status,
-  .fps {
+  .fps,
+  .model-status {
     text-align: center;
   }
 }

@@ -12,8 +12,12 @@ numpy
 # Barra de progreso para procesamiento de videos
 tqdm
 
+# Para machine learning (necesario para el modelo entrenado)
+scikit-learn
+xgboost
+joblib
 
-# Para machine learning
-# scikit-learn
-# tensorflow
-# torch
+# Servidor web para la API del modelo
+flask
+flask-cors
+requests
