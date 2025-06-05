@@ -1,2 +1,4 @@
 data/raw/
 data/raw/*
+notebooks/data/*
+notebooks/models/*
