@@ -91,17 +91,22 @@ def combine_processed_data(base_dir='data/processed'):
                 df = load_csv_file(csv_file, movement)
                 
                 if df is not None and len(df) > 0:
-                    # Seleccionar landmarks relevantes
-                    df_relevant = get_relevant_landmarks(df)
+                    combined_data.append(df)
+                    processing_stats[movement]['files'] += 1
+                    processing_stats[movement]['frames'] += len(df)
+                    print(f"  ✓ {csv_file.name}: {len(df)} landmarks")
                     
-                    if df_relevant is not None:
-                        combined_data.append(df_relevant)
-                        processing_stats[movement]['files'] += 1
-                        processing_stats[movement]['frames'] += len(df_relevant)
-                        print(f"  ✓ {csv_file.name}: {len(df_relevant)} landmarks")
-                    else:
-                        print(f"  ✗ {csv_file.name}: Sin landmarks relevantes")
-                        processing_stats[movement]['errors'] += 1
+                    # Seleccionar landmarks relevantes
+                    # df_relevant = get_relevant_landmarks(df)
+                    
+                    # if df_relevant is not None:
+                    #     combined_data.append(df_relevant)
+                    #     processing_stats[movement]['files'] += 1
+                    #     processing_stats[movement]['frames'] += len(df_relevant)
+                    #     print(f"  ✓ {csv_file.name}: {len(df_relevant)} landmarks")
+                    # else:
+                    #     print(f"  ✗ {csv_file.name}: Sin landmarks relevantes")
+                    #     processing_stats[movement]['errors'] += 1
                 else:
                     print(f"  ✗ {csv_file.name}: Archivo vacío o sin poses válidas")
                     processing_stats[movement]['errors'] += 1

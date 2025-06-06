@@ -26,9 +26,10 @@ class FeatureEngineer:
             31: "left_foot", 32: "right_foot"
         }
         
-        # Histórico para calcular velocidades (solo para tiempo real)
-        self.previous_frame = None
+        # Histórico para calcular velocidades y secuencias (para tiempo real)
+        self.previous_frames = {}  # Por landmark_index
         self.frame_count = 0
+        self.sequence_count = {}  # Por landmark_index para sequence_position
     
     def calculate_angle(self, p1, p2, p3):
         """Calcula el ángulo entre tres puntos"""
@@ -73,207 +74,105 @@ class FeatureEngineer:
         
         return pd.DataFrame(pivot_data)
     
-    def create_normalized_features(self, df_pivot):
-        """Crear características normalizadas que el modelo espera"""
-        df_enhanced = df_pivot.copy()
-        
-        # Frame normalizado (para tiempo real, usar contador)
+    def create_enhanced_features(self, df):
+        """
+        Crear todas las características mejoradas siguiendo exactamente la lógica del entrenamiento
+        """
+        df_enhanced = df.copy()
         self.frame_count += 1
-        df_enhanced['frame_normalized'] = self.frame_count / 100.0  # Normalizar por escala arbitraria
         
-        # Coordenadas normalizadas (normalizar por el rango típico de MediaPipe: 0-1)
-        for coord in ['x', 'y', 'z']:
-            coord_columns = [col for col in df_enhanced.columns if col.startswith(f'{coord}_')]
-            if coord_columns:
-                # Para MediaPipe, las coordenadas ya están normalizadas (0-1), pero podemos re-escalar
-                for col in coord_columns:
-                    if not df_enhanced[col].isna().all():
-                        # Crear columna normalizada global
-                        normalized_col = f"{coord}_normalized"
-                        if normalized_col not in df_enhanced.columns:
-                            # Usar promedio de todas las coordenadas de este tipo
-                            df_enhanced[normalized_col] = df_enhanced[coord_columns].mean(axis=1)
+        # PASO 1: Normalizar coordenadas por frame (centrar respecto al centroide)
+        logger.info("Normalizando coordenadas por frame...")
         
-        # Características de visibility específicas que el modelo necesita
-        vis_columns = [col for col in df_enhanced.columns if col.startswith('vis_')]
-        if vis_columns:
-            # y_visibility y z_visibility como promedios
-            df_enhanced['y_visibility'] = df_enhanced[vis_columns].mean(axis=1)
-            df_enhanced['z_visibility'] = df_enhanced[vis_columns].mean(axis=1)
-        
-        return df_enhanced
-    
-    def create_landmark_binary_features(self, df_pivot):
-        """Crear características binarias para landmarks específicos"""
-        df_binary = df_pivot.copy()
-        
-        # Landmarks que el modelo necesita: 0, 11, 12, 25, 27, 28
-        required_landmarks = [0, 11, 12, 25, 27, 28]
-        
-        for landmark_idx in required_landmarks:
-            # Verificar si el landmark está presente y visible
-            x_col = f'x_{landmark_idx}'
-            vis_col = f'vis_{landmark_idx}'
+        for frame in df_enhanced['frame'].unique():
+            frame_mask = df_enhanced['frame'] == frame
+            frame_data = df_enhanced[frame_mask]
             
-            if x_col in df_binary.columns and vis_col in df_binary.columns:
-                # Landmark está presente si tiene datos válidos y buena visibilidad
-                df_binary[f'is_landmark_{landmark_idx}'] = (
-                    (~df_binary[x_col].isna()) & 
-                    (df_binary[vis_col] > 0.5)
-                ).astype(int)
-            else:
-                # Si no está presente, marcar como 0
-                df_binary[f'is_landmark_{landmark_idx}'] = 0
-        
-        return df_binary
-    
-    def create_velocity_features(self, df_pivot):
-        """Crear características de velocidad basadas en el frame anterior"""
-        df_velocity = df_pivot.copy()
-        
-        # Para tiempo real, calcular velocidad respecto al frame anterior
-        if self.previous_frame is not None:
-            try:
-                # Calcular velocidades para coordenadas Y (las más importantes según el modelo)
-                y_columns = [col for col in df_velocity.columns if col.startswith('y_')]
+            if len(frame_data) > 0:
+                # Centrar coordenadas respecto al centroide del frame
+                x_center = frame_data['x'].mean()
+                y_center = frame_data['y'].mean()
+                z_center = frame_data['z'].mean()
                 
-                if y_columns:
-                    current_y = df_velocity[y_columns].mean(axis=1).iloc[0] if len(df_velocity) > 0 else 0
-                    previous_y = self.previous_frame[y_columns].mean(axis=1).iloc[0] if len(self.previous_frame) > 0 else 0
-                    
-                    velocity_y = abs(current_y - previous_y)
-                    df_velocity['velocity_y'] = velocity_y
-                    
-                    # Velocidad magnitude (combinando x, y, z)
-                    x_columns = [col for col in df_velocity.columns if col.startswith('x_')]
-                    z_columns = [col for col in df_velocity.columns if col.startswith('z_')]
-                    
-                    if x_columns and z_columns:
-                        current_x = df_velocity[x_columns].mean(axis=1).iloc[0] if len(df_velocity) > 0 else 0
-                        current_z = df_velocity[z_columns].mean(axis=1).iloc[0] if len(df_velocity) > 0 else 0
-                        
-                        previous_x = self.previous_frame[x_columns].mean(axis=1).iloc[0] if len(self.previous_frame) > 0 else 0
-                        previous_z = self.previous_frame[z_columns].mean(axis=1).iloc[0] if len(self.previous_frame) > 0 else 0
-                        
-                        velocity_x = abs(current_x - previous_x)
-                        velocity_z = abs(current_z - previous_z)
-                        
-                        velocity_magnitude = np.sqrt(velocity_x**2 + velocity_y**2 + velocity_z**2)
-                        df_velocity['velocity_magnitude'] = velocity_magnitude
-                    else:
-                        df_velocity['velocity_magnitude'] = velocity_y
-                else:
-                    df_velocity['velocity_y'] = 0
-                    df_velocity['velocity_magnitude'] = 0
-                    
-            except Exception as e:
-                logger.warning(f"Error calculando velocidades: {e}")
-                df_velocity['velocity_y'] = 0
-                df_velocity['velocity_magnitude'] = 0
-        else:
-            # Primer frame, velocidad = 0
-            df_velocity['velocity_y'] = 0
-            df_velocity['velocity_magnitude'] = 0
+                df_enhanced.loc[frame_mask, 'x_normalized'] = df_enhanced.loc[frame_mask, 'x'] - x_center
+                df_enhanced.loc[frame_mask, 'y_normalized'] = df_enhanced.loc[frame_mask, 'y'] - y_center
+                df_enhanced.loc[frame_mask, 'z_normalized'] = df_enhanced.loc[frame_mask, 'z'] - z_center
         
-        # Guardar frame actual para próxima iteración
-        self.previous_frame = df_velocity.copy()
+        # PASO 2: Crear features de velocidad (diferencias temporales)
+        logger.info("Creando features de velocidad...")
         
-        return df_velocity
-    
-    def create_sequence_features(self, df_pivot):
-        """Crear características de secuencia"""
-        df_sequence = df_pivot.copy()
+        # Ordenar por frame y landmark para calcular velocidades
+        df_enhanced = df_enhanced.sort_values(['landmark_index', 'frame'])
         
-        # Sequence position (posición en la secuencia)
-        df_sequence['sequence_position'] = self.frame_count
+        # Inicializar columnas de velocidad
+        df_enhanced['velocity_x'] = 0.0
+        df_enhanced['velocity_y'] = 0.0
+        df_enhanced['velocity_z'] = 0.0
+        df_enhanced['velocity_magnitude'] = 0.0
+        
+        # Calcular velocidades por landmark usando el histórico
+        for idx, row in df_enhanced.iterrows():
+            landmark_idx = row['landmark_index']
+            
+            if landmark_idx in self.previous_frames:
+                # Calcular diferencias temporales (velocidad)
+                prev_row = self.previous_frames[landmark_idx]
+                
+                velocity_x = row['x'] - prev_row['x']
+                velocity_y = row['y'] - prev_row['y']
+                velocity_z = row['z'] - prev_row['z']
+                velocity_magnitude = np.sqrt(velocity_x**2 + velocity_y**2 + velocity_z**2)
+                
+                df_enhanced.loc[idx, 'velocity_x'] = velocity_x
+                df_enhanced.loc[idx, 'velocity_y'] = velocity_y
+                df_enhanced.loc[idx, 'velocity_z'] = velocity_z
+                df_enhanced.loc[idx, 'velocity_magnitude'] = velocity_magnitude
+            
+            # Actualizar histórico
+            self.previous_frames[landmark_idx] = {
+                'x': row['x'],
+                'y': row['y'],
+                'z': row['z']
+            }
+        
+        # PASO 3: Crear features específicas por landmark
+        logger.info("Creando features específicas por landmark...")
+        
+        # Crear features one-hot para landmarks importantes (según la imagen)
+        important_landmarks = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28]
+        for landmark_idx in important_landmarks:
+            df_enhanced[f'is_landmark_{landmark_idx}'] = (df_enhanced['landmark_index'] == landmark_idx).astype(int)
+        
+        # PASO 4: Crear features de contexto temporal
+        logger.info("Creando features de contexto temporal...")
+        
+        # Frame normalizado (para tiempo real, normalizar por ventana deslizante)
+        # Como es tiempo real, usar una normalización basada en el contador de frames
+        df_enhanced['frame_normalized'] = self.frame_count / 100.0  # Escala arbitraria
+        
+        # Sequence position (posición en la secuencia por landmark)
+        for idx, row in df_enhanced.iterrows():
+            landmark_idx = row['landmark_index']
+            
+            if landmark_idx not in self.sequence_count:
+                self.sequence_count[landmark_idx] = 0
+            else:
+                self.sequence_count[landmark_idx] += 1
+            
+            df_enhanced.loc[idx, 'sequence_position'] = self.sequence_count[landmark_idx]
         
         # Sequence position normalizado
-        # Para tiempo real, normalizar por ventana deslizante (ej: últimos 100 frames)
-        df_sequence['sequence_position_normalized'] = (self.frame_count % 100) / 100.0
+        max_sequence = max(self.sequence_count.values()) if self.sequence_count else 1
+        df_enhanced['sequence_position_normalized'] = df_enhanced['sequence_position'] / (max_sequence + 1e-8)
         
-        return df_sequence
-    
-    def create_angle_features(self, df_pivot):
-        """Crea características basadas en ángulos entre articulaciones"""
-        df_angles = df_pivot.copy()
+        # PASO 5: Crear características de visibility específicas
+        logger.info("Creando características de visibility...")
         
-        # Definir ángulos importantes (mantener para compatibilidad, aunque no se usen en este modelo)
-        angle_definitions = [
-            # Ángulos del torso
-            ('torso_left', [11, 23, 25]),    # hombro_izq -> cadera_izq -> rodilla_izq
-            ('torso_right', [12, 24, 26]),   # hombro_der -> cadera_der -> rodilla_der
-            
-            # Ángulos de las piernas
-            ('leg_left', [23, 25, 27]),      # cadera_izq -> rodilla_izq -> tobillo_izq
-            ('leg_right', [24, 26, 28]),     # cadera_der -> rodilla_der -> tobillo_der
-        ]
+        # y_visibility y z_visibility como promedios de visibility
+        df_enhanced['y_visibility'] = df_enhanced['visibility']
+        df_enhanced['z_visibility'] = df_enhanced['visibility']
         
-        for angle_name, landmarks in angle_definitions:
-            angles = []
-            
-            for _, row in df_pivot.iterrows():
-                try:
-                    # Verificar que los landmarks existen
-                    if all(f'x_{lm}' in row.index for lm in landmarks):
-                        # Extraer coordenadas de los landmarks
-                        p1 = (row[f'x_{landmarks[0]}'], row[f'y_{landmarks[0]}'])
-                        p2 = (row[f'x_{landmarks[1]}'], row[f'y_{landmarks[1]}'])
-                        p3 = (row[f'x_{landmarks[2]}'], row[f'y_{landmarks[2]}'])
-                        
-                        # Verificar que no hay NaN
-                        if not (pd.isna(p1[0]) or pd.isna(p2[0]) or pd.isna(p3[0])):
-                            angle = self.calculate_angle(p1, p2, p3)
-                        else:
-                            angle = 0
-                    else:
-                        angle = 0
-                    
-                    angles.append(angle)
-                    
-                except:
-                    angles.append(0)
-            
-            df_angles[f'angle_{angle_name}'] = angles
-        
-        return df_angles
-    
-    def create_distance_features(self, df_pivot):
-        """Crea características basadas en distancias entre landmarks"""
-        df_distances = df_pivot.copy()
-        
-        # Distancias importantes (mantener para compatibilidad)
-        distance_definitions = [
-            ('shoulder_width', [11, 12]),
-            ('hip_width', [23, 24]),
-            ('torso_height', [0, 23]),
-        ]
-        
-        for dist_name, landmarks in distance_definitions:
-            distances = []
-            
-            for _, row in df_pivot.iterrows():
-                try:
-                    if all(f'x_{lm}' in row.index for lm in landmarks):
-                        # Extraer coordenadas 3D
-                        p1 = (row[f'x_{landmarks[0]}'], row[f'y_{landmarks[0]}'], row[f'z_{landmarks[0]}'])
-                        p2 = (row[f'x_{landmarks[1]}'], row[f'y_{landmarks[1]}'], row[f'z_{landmarks[1]}'])
-                        
-                        # Verificar que no hay NaN
-                        if not (pd.isna(p1[0]) or pd.isna(p2[0])):
-                            distance = self.calculate_distance(p1, p2)
-                        else:
-                            distance = 0
-                    else:
-                        distance = 0
-                
-                    distances.append(distance)
-                    
-                except:
-                    distances.append(0)
-            
-            df_distances[f'dist_{dist_name}'] = distances
-        
-        return df_distances
+        return df_enhanced
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -374,7 +273,7 @@ class MovementPredictor:
                 
                 # Verificar que es un landmark relevante
                 # Incluir todos los landmarks que el modelo podría necesitar
-                relevant_landmarks = [0, 11, 12, 23, 24, 25, 26, 27, 28, 31, 32]
+                relevant_landmarks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
                 if landmark_idx in relevant_landmarks:
                     data.append({
                         'frame': frame,
@@ -411,21 +310,11 @@ class MovementPredictor:
             if len(df) == 0:
                 return {"error": "No hay landmarks válidos"}
             
-            # Feature engineering completo - generar todas las características que el modelo necesita
-            # Usar el feature engineer principal que mantiene estado entre predicciones
-            fe = self.feature_engineer
+            # Feature engineering completo usando el nuevo método
+            logger.info("Iniciando feature engineering...")
             
-            df_pivot = fe.pivot_landmarks(df)
-            
-            # Agregar todas las características necesarias
-            df_with_normalized = fe.create_normalized_features(df_pivot)
-            df_with_binary = fe.create_landmark_binary_features(df_with_normalized)
-            df_with_velocity = fe.create_velocity_features(df_with_binary)
-            df_with_sequence = fe.create_sequence_features(df_with_velocity)
-            
-            # También mantener características de ángulos y distancias para compatibilidad
-            df_with_angles = fe.create_angle_features(df_with_sequence)
-            df_with_features = fe.create_distance_features(df_with_angles)
+            # Crear todas las características usando el método mejorado
+            df_with_features = self.feature_engineer.create_enhanced_features(df)
             
             # Verificar qué features tenemos vs las que necesitamos
             available_features = set(df_with_features.columns)
@@ -442,7 +331,7 @@ class MovementPredictor:
             X = df_with_features[self.selected_features]
             
             logger.info(f"Shape de X: {X.shape}")
-            logger.info(f"Features utilizadas: {list(X.columns)}")
+            logger.info(f"Features utilizadas: {list(X.columns)[:10]}...")  # Solo mostrar las primeras 10
             
             # Manejar NaN e infinitos
             X = X.fillna(0)
@@ -475,6 +364,8 @@ class MovementPredictor:
             
         except Exception as e:
             logger.error(f"Error en predicción: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return {"error": str(e)}
 
 # Inicializar predictor global
