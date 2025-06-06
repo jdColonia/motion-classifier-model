@@ -438,13 +438,35 @@ async function classifyMovement(landmarks) {
   lastPredictionTime = now;
 
   try {
-    // Preparar datos de landmarks
-    const landmarksData = landmarks.map((landmark, index) => ({
-      x: landmark.x,
-      y: landmark.y,
-      z: landmark.z,
-      visibility: landmark.visibility,
-    }));
+    // Índices de landmarks relevantes para el modelo
+    const relevantLandmarkIndices = [0, 11, 12, 23, 24, 25, 26, 27, 28, 31, 32];
+
+    // Preparar datos de landmarks - solo los relevantes con landmark_index
+    const landmarksData = relevantLandmarkIndices
+      .map((index) => {
+        const landmark = landmarks[index];
+        if (landmark) {
+          return {
+            landmark_index: index,
+            x: landmark.x,
+            y: landmark.y,
+            z: landmark.z,
+            visibility: landmark.visibility,
+          };
+        }
+        return null;
+      })
+      .filter((landmark) => landmark !== null); // Filtrar landmarks nulos
+
+    // Verificar que tenemos al menos algunos landmarks
+    if (landmarksData.length === 0) {
+      console.warn("No se encontraron landmarks relevantes para clasificación");
+      return;
+    }
+
+    console.log(
+      `Enviando ${landmarksData.length} landmarks relevantes a la API`
+    );
 
     // Enviar a la API
     const response = await fetch("http://localhost:5000/predict", {

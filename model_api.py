@@ -25,6 +25,10 @@ class FeatureEngineer:
             26: "right_knee", 27: "left_ankle", 28: "right_ankle",
             31: "left_foot", 32: "right_foot"
         }
+        
+        # Histórico para calcular velocidades (solo para tiempo real)
+        self.previous_frame = None
+        self.frame_count = 0
     
     def calculate_angle(self, p1, p2, p3):
         """Calcula el ángulo entre tres puntos"""
@@ -55,7 +59,6 @@ class FeatureEngineer:
             # Agregar coordenadas para cada landmark
             for _, landmark_row in frame_data.iterrows():
                 landmark_idx = landmark_row['landmark_index']
-                prefix = f"{landmark_row['x']}_{landmark_idx}"
                 
                 row_data[f'x_{landmark_idx}'] = landmark_row['x']
                 row_data[f'y_{landmark_idx}'] = landmark_row['y'] 
@@ -70,11 +73,131 @@ class FeatureEngineer:
         
         return pd.DataFrame(pivot_data)
     
+    def create_normalized_features(self, df_pivot):
+        """Crear características normalizadas que el modelo espera"""
+        df_enhanced = df_pivot.copy()
+        
+        # Frame normalizado (para tiempo real, usar contador)
+        self.frame_count += 1
+        df_enhanced['frame_normalized'] = self.frame_count / 100.0  # Normalizar por escala arbitraria
+        
+        # Coordenadas normalizadas (normalizar por el rango típico de MediaPipe: 0-1)
+        for coord in ['x', 'y', 'z']:
+            coord_columns = [col for col in df_enhanced.columns if col.startswith(f'{coord}_')]
+            if coord_columns:
+                # Para MediaPipe, las coordenadas ya están normalizadas (0-1), pero podemos re-escalar
+                for col in coord_columns:
+                    if not df_enhanced[col].isna().all():
+                        # Crear columna normalizada global
+                        normalized_col = f"{coord}_normalized"
+                        if normalized_col not in df_enhanced.columns:
+                            # Usar promedio de todas las coordenadas de este tipo
+                            df_enhanced[normalized_col] = df_enhanced[coord_columns].mean(axis=1)
+        
+        # Características de visibility específicas que el modelo necesita
+        vis_columns = [col for col in df_enhanced.columns if col.startswith('vis_')]
+        if vis_columns:
+            # y_visibility y z_visibility como promedios
+            df_enhanced['y_visibility'] = df_enhanced[vis_columns].mean(axis=1)
+            df_enhanced['z_visibility'] = df_enhanced[vis_columns].mean(axis=1)
+        
+        return df_enhanced
+    
+    def create_landmark_binary_features(self, df_pivot):
+        """Crear características binarias para landmarks específicos"""
+        df_binary = df_pivot.copy()
+        
+        # Landmarks que el modelo necesita: 0, 11, 12, 25, 27, 28
+        required_landmarks = [0, 11, 12, 25, 27, 28]
+        
+        for landmark_idx in required_landmarks:
+            # Verificar si el landmark está presente y visible
+            x_col = f'x_{landmark_idx}'
+            vis_col = f'vis_{landmark_idx}'
+            
+            if x_col in df_binary.columns and vis_col in df_binary.columns:
+                # Landmark está presente si tiene datos válidos y buena visibilidad
+                df_binary[f'is_landmark_{landmark_idx}'] = (
+                    (~df_binary[x_col].isna()) & 
+                    (df_binary[vis_col] > 0.5)
+                ).astype(int)
+            else:
+                # Si no está presente, marcar como 0
+                df_binary[f'is_landmark_{landmark_idx}'] = 0
+        
+        return df_binary
+    
+    def create_velocity_features(self, df_pivot):
+        """Crear características de velocidad basadas en el frame anterior"""
+        df_velocity = df_pivot.copy()
+        
+        # Para tiempo real, calcular velocidad respecto al frame anterior
+        if self.previous_frame is not None:
+            try:
+                # Calcular velocidades para coordenadas Y (las más importantes según el modelo)
+                y_columns = [col for col in df_velocity.columns if col.startswith('y_')]
+                
+                if y_columns:
+                    current_y = df_velocity[y_columns].mean(axis=1).iloc[0] if len(df_velocity) > 0 else 0
+                    previous_y = self.previous_frame[y_columns].mean(axis=1).iloc[0] if len(self.previous_frame) > 0 else 0
+                    
+                    velocity_y = abs(current_y - previous_y)
+                    df_velocity['velocity_y'] = velocity_y
+                    
+                    # Velocidad magnitude (combinando x, y, z)
+                    x_columns = [col for col in df_velocity.columns if col.startswith('x_')]
+                    z_columns = [col for col in df_velocity.columns if col.startswith('z_')]
+                    
+                    if x_columns and z_columns:
+                        current_x = df_velocity[x_columns].mean(axis=1).iloc[0] if len(df_velocity) > 0 else 0
+                        current_z = df_velocity[z_columns].mean(axis=1).iloc[0] if len(df_velocity) > 0 else 0
+                        
+                        previous_x = self.previous_frame[x_columns].mean(axis=1).iloc[0] if len(self.previous_frame) > 0 else 0
+                        previous_z = self.previous_frame[z_columns].mean(axis=1).iloc[0] if len(self.previous_frame) > 0 else 0
+                        
+                        velocity_x = abs(current_x - previous_x)
+                        velocity_z = abs(current_z - previous_z)
+                        
+                        velocity_magnitude = np.sqrt(velocity_x**2 + velocity_y**2 + velocity_z**2)
+                        df_velocity['velocity_magnitude'] = velocity_magnitude
+                    else:
+                        df_velocity['velocity_magnitude'] = velocity_y
+                else:
+                    df_velocity['velocity_y'] = 0
+                    df_velocity['velocity_magnitude'] = 0
+                    
+            except Exception as e:
+                logger.warning(f"Error calculando velocidades: {e}")
+                df_velocity['velocity_y'] = 0
+                df_velocity['velocity_magnitude'] = 0
+        else:
+            # Primer frame, velocidad = 0
+            df_velocity['velocity_y'] = 0
+            df_velocity['velocity_magnitude'] = 0
+        
+        # Guardar frame actual para próxima iteración
+        self.previous_frame = df_velocity.copy()
+        
+        return df_velocity
+    
+    def create_sequence_features(self, df_pivot):
+        """Crear características de secuencia"""
+        df_sequence = df_pivot.copy()
+        
+        # Sequence position (posición en la secuencia)
+        df_sequence['sequence_position'] = self.frame_count
+        
+        # Sequence position normalizado
+        # Para tiempo real, normalizar por ventana deslizante (ej: últimos 100 frames)
+        df_sequence['sequence_position_normalized'] = (self.frame_count % 100) / 100.0
+        
+        return df_sequence
+    
     def create_angle_features(self, df_pivot):
         """Crea características basadas en ángulos entre articulaciones"""
         df_angles = df_pivot.copy()
         
-        # Definir ángulos importantes
+        # Definir ángulos importantes (mantener para compatibilidad, aunque no se usen en este modelo)
         angle_definitions = [
             # Ángulos del torso
             ('torso_left', [11, 23, 25]),    # hombro_izq -> cadera_izq -> rodilla_izq
@@ -83,10 +206,6 @@ class FeatureEngineer:
             # Ángulos de las piernas
             ('leg_left', [23, 25, 27]),      # cadera_izq -> rodilla_izq -> tobillo_izq
             ('leg_right', [24, 26, 28]),     # cadera_der -> rodilla_der -> tobillo_der
-            
-            # Ángulos de postura
-            ('posture_left', [0, 11, 23]),   # nariz -> hombro_izq -> cadera_izq
-            ('posture_right', [0, 12, 24]),  # nariz -> hombro_der -> cadera_der
         ]
         
         for angle_name, landmarks in angle_definitions:
@@ -94,16 +213,20 @@ class FeatureEngineer:
             
             for _, row in df_pivot.iterrows():
                 try:
-                    # Extraer coordenadas de los landmarks
-                    p1 = (row[f'x_{landmarks[0]}'], row[f'y_{landmarks[0]}'])
-                    p2 = (row[f'x_{landmarks[1]}'], row[f'y_{landmarks[1]}'])
-                    p3 = (row[f'x_{landmarks[2]}'], row[f'y_{landmarks[2]}'])
-                    
                     # Verificar que los landmarks existen
-                    if not (pd.isna(p1[0]) or pd.isna(p2[0]) or pd.isna(p3[0])):
-                        angle = self.calculate_angle(p1, p2, p3)
+                    if all(f'x_{lm}' in row.index for lm in landmarks):
+                        # Extraer coordenadas de los landmarks
+                        p1 = (row[f'x_{landmarks[0]}'], row[f'y_{landmarks[0]}'])
+                        p2 = (row[f'x_{landmarks[1]}'], row[f'y_{landmarks[1]}'])
+                        p3 = (row[f'x_{landmarks[2]}'], row[f'y_{landmarks[2]}'])
+                        
+                        # Verificar que no hay NaN
+                        if not (pd.isna(p1[0]) or pd.isna(p2[0]) or pd.isna(p3[0])):
+                            angle = self.calculate_angle(p1, p2, p3)
+                        else:
+                            angle = 0
                     else:
-                        angle = 0  # Valor por defecto si faltan datos
+                        angle = 0
                     
                     angles.append(angle)
                     
@@ -118,19 +241,11 @@ class FeatureEngineer:
         """Crea características basadas en distancias entre landmarks"""
         df_distances = df_pivot.copy()
         
-        # Distancias importantes
+        # Distancias importantes (mantener para compatibilidad)
         distance_definitions = [
-            # Anchura de hombros y caderas
             ('shoulder_width', [11, 12]),
             ('hip_width', [23, 24]),
-            
-            # Altura del centro de masa
-            ('torso_height', [0, 23]),  # Nariz a cadera promedio
-            
-            # Longitud de extremidades
-            ('left_leg', [25, 27]),     # rodilla_izq -> tobillo_izq
-            ('right_leg', [26, 28]),    # rodilla_der -> tobillo_der
-            ('feet_distance', [31, 32]), # pie_izq -> pie_der
+            ('torso_height', [0, 23]),
         ]
         
         for dist_name, landmarks in distance_definitions:
@@ -138,13 +253,16 @@ class FeatureEngineer:
             
             for _, row in df_pivot.iterrows():
                 try:
-                    # Extraer coordenadas 3D
-                    p1 = (row[f'x_{landmarks[0]}'], row[f'y_{landmarks[0]}'], row[f'z_{landmarks[0]}'])
-                    p2 = (row[f'x_{landmarks[1]}'], row[f'y_{landmarks[1]}'], row[f'z_{landmarks[1]}'])
-                    
-                    # Verificar que los landmarks existen
-                    if not (pd.isna(p1[0]) or pd.isna(p2[0])):
-                        distance = self.calculate_distance(p1, p2)
+                    if all(f'x_{lm}' in row.index for lm in landmarks):
+                        # Extraer coordenadas 3D
+                        p1 = (row[f'x_{landmarks[0]}'], row[f'y_{landmarks[0]}'], row[f'z_{landmarks[0]}'])
+                        p2 = (row[f'x_{landmarks[1]}'], row[f'y_{landmarks[1]}'], row[f'z_{landmarks[1]}'])
+                        
+                        # Verificar que no hay NaN
+                        if not (pd.isna(p1[0]) or pd.isna(p2[0])):
+                            distance = self.calculate_distance(p1, p2)
+                        else:
+                            distance = 0
                     else:
                         distance = 0
                 
@@ -208,7 +326,14 @@ class MovementPredictor:
             self.model = joblib.load(latest_model_file)
             self.scaler = joblib.load(self.models_dir / f"scaler_{version}.joblib")
             self.label_encoder = joblib.load(self.models_dir / f"label_encoder_{version}.joblib")
-            self.feature_engineer = joblib.load(self.models_dir / f"feature_engineer_{version}.joblib")
+            
+            # Crear una nueva instancia del FeatureEngineer en lugar de cargarlo desde joblib
+            # porque puede haber problemas de deserialización
+            self.feature_engineer = FeatureEngineer()
+            
+            # Para predicciones en tiempo real, necesitamos una instancia por predicción
+            # para manejar correctamente el estado de velocidades
+            self.feature_engineer_template = FeatureEngineer()
             
             # Cargar metadatos
             metadata_file = self.models_dir / f"model_metadata_{version}.json"
@@ -229,12 +354,28 @@ class MovementPredictor:
     def landmarks_to_dataframe(self, landmarks_data):
         """Convertir landmarks de JavaScript a DataFrame de pandas"""
         try:
+            logger.info(f"Convirtiendo {len(landmarks_data)} landmarks a DataFrame")
+            
             # Crear DataFrame desde los landmarks recibidos
             data = []
             frame = 0  # Frame único para predicción en tiempo real
             
-            for landmark_idx, landmark in enumerate(landmarks_data):
-                if landmark_idx in [0, 11, 12, 23, 24, 25, 26, 27, 28, 31, 32]:  # Solo landmarks relevantes
+            for landmark in landmarks_data:
+                if not isinstance(landmark, dict):
+                    logger.error(f"Landmark no es un diccionario: {type(landmark)}")
+                    continue
+                
+                required_keys = ['landmark_index', 'x', 'y', 'z', 'visibility']
+                if not all(key in landmark for key in required_keys):
+                    logger.error(f"Landmark falta claves requeridas. Claves encontradas: {landmark.keys()}")
+                    continue
+                
+                landmark_idx = landmark['landmark_index']
+                
+                # Verificar que es un landmark relevante
+                # Incluir todos los landmarks que el modelo podría necesitar
+                relevant_landmarks = [0, 11, 12, 23, 24, 25, 26, 27, 28, 31, 32]
+                if landmark_idx in relevant_landmarks:
                     data.append({
                         'frame': frame,
                         'landmark_index': landmark_idx,
@@ -244,7 +385,9 @@ class MovementPredictor:
                         'visibility': landmark['visibility'],
                         'movement': 'unknown'  # Placeholder
                     })
+                # Remover el logging excesivo para landmarks no relevantes
             
+            logger.info(f"DataFrame creado con {len(data)} landmarks válidos")
             return pd.DataFrame(data)
             
         except Exception as e:
@@ -268,24 +411,47 @@ class MovementPredictor:
             if len(df) == 0:
                 return {"error": "No hay landmarks válidos"}
             
-            # Feature engineering
-            df_pivot = self.feature_engineer.pivot_landmarks(df)
-            df_with_angles = self.feature_engineer.create_angle_features(df_pivot)
-            df_with_features = self.feature_engineer.create_distance_features(df_with_angles)
+            # Feature engineering completo - generar todas las características que el modelo necesita
+            # Usar el feature engineer principal que mantiene estado entre predicciones
+            fe = self.feature_engineer
             
-            # Verificar que tenemos las features necesarias
-            missing_features = set(self.selected_features) - set(df_with_features.columns)
+            df_pivot = fe.pivot_landmarks(df)
+            
+            # Agregar todas las características necesarias
+            df_with_normalized = fe.create_normalized_features(df_pivot)
+            df_with_binary = fe.create_landmark_binary_features(df_with_normalized)
+            df_with_velocity = fe.create_velocity_features(df_with_binary)
+            df_with_sequence = fe.create_sequence_features(df_with_velocity)
+            
+            # También mantener características de ángulos y distancias para compatibilidad
+            df_with_angles = fe.create_angle_features(df_with_sequence)
+            df_with_features = fe.create_distance_features(df_with_angles)
+            
+            # Verificar qué features tenemos vs las que necesitamos
+            available_features = set(df_with_features.columns)
+            required_features = set(self.selected_features)
+            missing_features = required_features - available_features
+            
             if missing_features:
-                # Agregar features faltantes con valor 0
+                logger.warning(f"Features faltantes: {missing_features}")
+                # Agregar features faltantes con valor por defecto
                 for feature in missing_features:
-                    df_with_features[feature] = 0
+                    df_with_features[feature] = 0.0
             
-            # Seleccionar features
+            # Seleccionar solo las features que el modelo necesita
             X = df_with_features[self.selected_features]
+            
+            logger.info(f"Shape de X: {X.shape}")
+            logger.info(f"Features utilizadas: {list(X.columns)}")
             
             # Manejar NaN e infinitos
             X = X.fillna(0)
             X = X.replace([np.inf, -np.inf], 0)
+            
+            # Verificar que no hay problemas con los datos
+            if X.isnull().sum().sum() > 0:
+                logger.warning("Se encontraron valores NaN después de limpiar")
+                X = X.fillna(0)
             
             # Escalar
             X_scaled = self.scaler.transform(X)
@@ -345,19 +511,25 @@ def predict_movement():
         data = request.get_json()
         
         if not data or 'landmarks' not in data:
+            logger.error("Datos de landmarks faltantes en request")
             return jsonify({"error": "Datos de landmarks requeridos"}), 400
         
         landmarks = data['landmarks']
         
         if not isinstance(landmarks, list) or len(landmarks) == 0:
+            logger.error(f"Landmarks inválidos: tipo={type(landmarks)}, longitud={len(landmarks) if isinstance(landmarks, list) else 'N/A'}")
             return jsonify({"error": "Landmarks inválidos"}), 400
+        
+        logger.info(f"Recibidos {len(landmarks)} landmarks para predicción")
         
         # Realizar predicción
         result = predictor.predict(landmarks)
         
         if "error" in result:
+            logger.error(f"Error en predicción: {result['error']}")
             return jsonify(result), 400
         
+        logger.info(f"Predicción exitosa: {result['prediction']} (confianza: {result['confidence']:.3f})")
         return jsonify(result)
         
     except Exception as e:
