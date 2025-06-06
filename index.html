@@ -3,47 +3,122 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detector de Poses en Tiempo Real</title>
+    <title>Clasificador de Movimientos Corporales | IA en Tiempo Real</title>
+    <meta
+      name="description"
+      content="Aplicación de inteligencia artificial para la detección y clasificación de movimientos corporales en tiempo real usando MediaPipe"
+    />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Iconos de Lucide -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>Detector de Poses Corporales</h1>
-        <p>Detección de landmarks en tiempo real usando MediaPipe</p>
+        <h1>🤖 Clasificador de Movimientos Corporales</h1>
+        <p>
+          Detección y análisis de poses en tiempo real con Inteligencia
+          Artificial
+        </p>
+        <div class="header-badge">
+          <span>Powered by MediaPipe + TensorFlow</span>
+        </div>
       </header>
 
       <main>
         <div class="video-container">
-          <video id="input_video" autoplay muted playsinline></video>
-          <canvas id="output_canvas"></canvas>
+          <div class="video-wrapper">
+            <video id="input_video" autoplay muted playsinline></video>
+            <canvas id="output_canvas"></canvas>
+            <div class="video-overlay">
+              <div class="status-indicator" id="camera-status">
+                <i data-lucide="camera-off"></i>
+                <span>Cámara desconectada</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="controls">
-          <button id="start-btn" class="btn btn-primary">Iniciar Cámara</button>
+          <button id="start-btn" class="btn btn-primary">
+            <i data-lucide="play"></i>
+            <span>Iniciar Cámara</span>
+          </button>
           <button id="stop-btn" class="btn btn-secondary" disabled>
-            Detener Cámara
+            <i data-lucide="square"></i>
+            <span>Detener Cámara</span>
           </button>
           <div class="toggle-container">
             <label for="show-landmarks">
               <input type="checkbox" id="show-landmarks" checked />
-              Mostrar Landmarks
+              <i data-lucide="eye"></i>
+              <span>Mostrar Landmarks</span>
             </label>
           </div>
         </div>
 
         <div class="info">
-          <div class="status">
-            <span id="status">Estado: Desconectado</span>
+          <div class="status card">
+            <div class="card-header">
+              <i data-lucide="activity"></i>
+              <h3>Estado del Sistema</h3>
+            </div>
+            <div class="card-content">
+              <span id="status">Desconectado</span>
+            </div>
           </div>
-          <div class="fps">
-            <span id="fps">FPS: 0</span>
+
+          <div class="fps card">
+            <div class="card-header">
+              <i data-lucide="zap"></i>
+              <h3>Rendimiento</h3>
+            </div>
+            <div class="card-content">
+              <span id="fps">0 FPS</span>
+            </div>
           </div>
-          <div class="model-status">
-            <span id="model-status">Modelo: Verificando...</span>
+
+          <div class="model-status card">
+            <div class="card-header">
+              <i data-lucide="brain"></i>
+              <h3>Modelo IA</h3>
+            </div>
+            <div class="card-content">
+              <span id="model-status">Verificando...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-lucide="scan"></i>
+            </div>
+            <h3>Detección en Tiempo Real</h3>
+            <p>Análisis instantáneo de 33 puntos clave del cuerpo humano</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <h3>Clasificación Inteligente</h3>
+            <p>Reconocimiento automático de diferentes tipos de movimientos</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <h3>Privacidad Total</h3>
+            <p>Procesamiento local sin envío de datos a servidores externos</p>
           </div>
         </div>
       </main>
+
+      <footer>
+        <p>© 2025 Clasificador de Movimientos Corporales</p>
+      </footer>
     </div>
 
     <!-- MediaPipe -->
@@ -66,5 +141,12 @@
 
     <!-- Script principal -->
     <script src="script.js"></script>
+
+    <!-- Inicializar iconos -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        lucide.createIcons();
+      });
+    </script>
   </body>
 </html>

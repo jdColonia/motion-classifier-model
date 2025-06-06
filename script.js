@@ -11,6 +11,7 @@ let isModelAvailable = false;
 let currentPrediction = null;
 let predictionHistory = [];
 let lastPredictionTime = 0;
+let lastValidPrediction = null; // Mantener la última predicción válida
 
 // Elementos del DOM
 const videoElement = document.getElementById("input_video");
@@ -52,6 +53,14 @@ async function initializeApp() {
 
     pose.onResults(onResults);
 
+    // Inicializar predicción por defecto
+    if (!isModelAvailable) {
+      lastValidPrediction = {
+        prediction: "Esperando modelo...",
+        confidence: 0.0,
+      };
+    }
+
     updateStatus("Listo para iniciar", "ready");
   } catch (error) {
     console.error("Error al inicializar:", error);
@@ -82,6 +91,11 @@ function onResults(results) {
   // Clasificar movimiento si el modelo está disponible
   if (isModelAvailable && results.poseLandmarks) {
     classifyMovement(results.poseLandmarks);
+  }
+
+  // Siempre mostrar la última predicción disponible
+  if (lastValidPrediction) {
+    displayPredictionOnCanvas(lastValidPrediction);
   }
 
   canvasCtx.restore();
@@ -257,8 +271,38 @@ function stopCamera() {
 
 // Función para actualizar el estado
 function updateStatus(message, type = "default") {
-  statusElement.textContent = `Estado: ${message}`;
-  statusElement.parentElement.className = `status ${type}`;
+  if (statusElement) {
+    statusElement.textContent = message;
+    statusElement.parentElement.className = `status card ${type}`;
+  }
+
+  // Actualizar también el indicador de cámara en el video (solo si existe)
+  const cameraStatus = document.getElementById("camera-status");
+  if (cameraStatus) {
+    const cameraIcon = cameraStatus.querySelector("i");
+    const cameraText = cameraStatus.querySelector("span");
+
+    if (cameraIcon && cameraText) {
+      if (type === "connected") {
+        cameraIcon.setAttribute("data-lucide", "camera");
+        cameraText.textContent = "Cámara activa";
+      } else if (type === "error") {
+        cameraIcon.setAttribute("data-lucide", "camera-off");
+        cameraText.textContent = "Error de cámara";
+      } else if (type === "loading") {
+        cameraIcon.setAttribute("data-lucide", "loader");
+        cameraText.textContent = "Conectando...";
+      } else {
+        cameraIcon.setAttribute("data-lucide", "camera-off");
+        cameraText.textContent = "Cámara desconectada";
+      }
+
+      // Actualizar iconos
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons();
+      }
+    }
+  }
 }
 
 // Función para actualizar FPS
@@ -267,7 +311,7 @@ function updateFPS() {
   const currentTime = performance.now();
 
   if (currentTime - lastTime >= 1000) {
-    fpsElement.textContent = `FPS: ${fpsCounter}`;
+    fpsElement.textContent = `${fpsCounter} FPS`;
     fpsCounter = 0;
     lastTime = currentTime;
   }
@@ -340,38 +384,55 @@ if (document.readyState === "loading") {
 // Verificar disponibilidad de la API del modelo
 async function checkModelAPI() {
   const modelStatusElement = document.getElementById("model-status");
-  
+
   try {
     const response = await fetch("http://localhost:5000/health");
     if (response.ok) {
       const data = await response.json();
       isModelAvailable = data.model_loaded;
-      
+
       if (isModelAvailable) {
-        modelStatusElement.textContent = `Modelo: ${data.model_info?.name || 'Cargado'} ✅`;
-        modelStatusElement.parentElement.className = "model-status available";
+        modelStatusElement.textContent = `${
+          data.model_info?.name || "Cargado"
+        } ✅`;
+        modelStatusElement.parentElement.className =
+          "model-status card available";
         console.log("✅ API del modelo disponible:", data);
+
+        // Establecer predicción inicial
+        lastValidPrediction = {
+          prediction: "Detectando movimiento...",
+          confidence: 0.0,
+        };
       } else {
-        modelStatusElement.textContent = "Modelo: Error de carga ❌";
-        modelStatusElement.parentElement.className = "model-status unavailable";
+        modelStatusElement.textContent = "Error de carga ❌";
+        modelStatusElement.parentElement.className =
+          "model-status card unavailable";
       }
       return isModelAvailable;
     }
   } catch (error) {
     console.log("⚠️ API del modelo no disponible:", error.message);
   }
-  
+
   isModelAvailable = false;
-  modelStatusElement.textContent = "Modelo: No disponible ❌";
-  modelStatusElement.parentElement.className = "model-status unavailable";
+  modelStatusElement.textContent = "No disponible ❌";
+  modelStatusElement.parentElement.className = "model-status card unavailable";
+
+  // Establecer predicción por defecto
+  lastValidPrediction = {
+    prediction: "Modelo no disponible",
+    confidence: 0.0,
+  };
+
   return false;
 }
 
 // Clasificar movimiento usando la API
 async function classifyMovement(landmarks) {
-  // Limitar frecuencia de predicciones (máximo cada 500ms)
+  // Limitar frecuencia de predicciones (máximo cada 200ms para mejor fluidez)
   const now = Date.now();
-  if (now - lastPredictionTime < 500) {
+  if (now - lastPredictionTime < 200) {
     return;
   }
   lastPredictionTime = now;
@@ -382,7 +443,7 @@ async function classifyMovement(landmarks) {
       x: landmark.x,
       y: landmark.y,
       z: landmark.z,
-      visibility: landmark.visibility
+      visibility: landmark.visibility,
     }));
 
     // Enviar a la API
@@ -392,8 +453,8 @@ async function classifyMovement(landmarks) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        landmarks: landmarksData
-      })
+        landmarks: landmarksData,
+      }),
     });
 
     if (response.ok) {
@@ -415,12 +476,13 @@ function updatePrediction(result) {
   }
 
   currentPrediction = result;
-  
+  lastValidPrediction = result; // Almacenar la última predicción válida
+
   // Agregar a historial
   predictionHistory.push({
     prediction: result.prediction,
     confidence: result.confidence,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
 
   // Mantener solo las últimas 10 predicciones
@@ -428,8 +490,7 @@ function updatePrediction(result) {
     predictionHistory.shift();
   }
 
-  // Mostrar predicción en el canvas
-  displayPredictionOnCanvas(result);
+  // La predicción se mostrará en onResults(), no aquí para evitar duplicados
 }
 
 // Mostrar predicción en el canvas
@@ -450,38 +511,58 @@ function displayPredictionOnCanvas(result) {
   const x = 20;
   const y = 40;
 
-  // Dibujar fondo semi-transparente
-  canvasCtx.fillStyle = "rgba(0, 0, 0, 0.7)";
-  canvasCtx.fillRect(10, 10, 350, 80);
+  // Dibujar fondo semi-transparente más visible
+  canvasCtx.fillStyle = "rgba(0, 0, 0, 0.8)";
+  canvasCtx.fillRect(10, 10, 380, 90);
+
+  // Dibujar borde del rectángulo para mayor visibilidad
+  canvasCtx.strokeStyle = "#FFFFFF";
+  canvasCtx.lineWidth = 2;
+  canvasCtx.strokeRect(10, 10, 380, 90);
 
   // Dibujar texto con borde
   canvasCtx.fillStyle = "#FFFFFF";
+  canvasCtx.strokeStyle = "#000000";
+  canvasCtx.lineWidth = 3;
   canvasCtx.strokeText(predictionText, x, y);
   canvasCtx.fillText(predictionText, x, y);
-  
+
   canvasCtx.strokeText(confidenceText, x, y + 30);
   canvasCtx.fillText(confidenceText, x, y + 30);
 
-  // Cambiar color según confianza
+  // Cambiar color según confianza para la barra
   const confidence = result.confidence;
+  let barColor;
   if (confidence > 0.8) {
-    canvasCtx.fillStyle = "#00FF00"; // Verde para alta confianza
+    barColor = "#00FF00"; // Verde para alta confianza
   } else if (confidence > 0.6) {
-    canvasCtx.fillStyle = "#FFFF00"; // Amarillo para confianza media
+    barColor = "#FFFF00"; // Amarillo para confianza media
   } else {
-    canvasCtx.fillStyle = "#FF6600"; // Naranja para baja confianza
+    barColor = "#FF6600"; // Naranja para baja confianza
   }
 
   // Barra de confianza
-  const barWidth = 200;
-  const barHeight = 10;
+  const barWidth = 300;
+  const barHeight = 12;
   const barX = x;
-  const barY = y + 40;
+  const barY = y + 45;
 
   // Fondo de la barra
   canvasCtx.fillStyle = "rgba(255, 255, 255, 0.3)";
   canvasCtx.fillRect(barX, barY, barWidth, barHeight);
 
+  // Borde de la barra
+  canvasCtx.strokeStyle = "#FFFFFF";
+  canvasCtx.lineWidth = 1;
+  canvasCtx.strokeRect(barX, barY, barWidth, barHeight);
+
   // Barra de progreso
+  canvasCtx.fillStyle = barColor;
   canvasCtx.fillRect(barX, barY, barWidth * confidence, barHeight);
+
+  // Mostrar timestamp para debug (opcional)
+  const timeText = `Actualizado: ${new Date().toLocaleTimeString()}`;
+  canvasCtx.font = "12px Arial";
+  canvasCtx.fillStyle = "#CCCCCC";
+  canvasCtx.fillText(timeText, x, y + 75);
 }
