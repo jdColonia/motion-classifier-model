@@ -1,23 +1,24 @@
 # Dependencias del proyecto Motion Classifier Model
 # Este archivo contiene todas las dependencias de Python necesarias para ejecutar el proyecto
 
-# Procesamiento de video y visión por computadora
-mediapipe
-opencv-python
+# Framework web
+Flask
+flask-cors
 
-# Manipulación y análisis de datos
+# Machine Learning y análisis de datos
+scikit-learn
 pandas
 numpy
-
-# Barra de progreso para procesamiento de videos
-tqdm
-
-# Para machine learning (necesario para el modelo entrenado)
-scikit-learn
-xgboost
 joblib
 
-# Servidor web para la API del modelo
-flask
-flask-cors
+# XGBoost para modelos de gradient boosting
+xgboost
+
+# Utilidades adicionales
+pathlib2
+
+# Para desarrollo y debugging (opcional)
 requests
+
+# Nota: MediaPipe se carga desde CDN en el frontend
+# No es necesario instalarlo en el backend para este proyecto
