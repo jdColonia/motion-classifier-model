@@ -1,0 +1,878 @@
+{
+  "model_info": {
+    "name": "Random Forest",
+    "version": "v1.0",
+    "timestamp": "2025-06-09T02:20:03.245808",
+    "accuracy": 1.0,
+    "f1_score": 1.0,
+    "algorithm_type": "supervised_classification_biomechanical",
+    "optimization_time": 108.97956895828247
+  },
+  "biomechanical_features": {
+    "angles_calculated": [
+      "angle_left_knee",
+      "angle_right_knee",
+      "trunk_inclination"
+    ],
+    "distances_measured": [
+      "shoulder_width",
+      "hip_width",
+      "torso_height"
+    ],
+    "velocities_tracked": [
+      "nose_vel_x",
+      "nose_vel_y",
+      "nose_vel_magnitude",
+      "left_shoulder_vel_x",
+      "left_shoulder_vel_y",
+      "left_shoulder_vel_magnitude",
+      "right_shoulder_vel_x",
+      "right_shoulder_vel_y",
+      "right_shoulder_vel_magnitude",
+      "left_hip_vel_x",
+      "left_hip_vel_y",
+      "left_hip_vel_magnitude",
+      "right_hip_vel_x",
+      "right_hip_vel_y",
+      "right_hip_vel_magnitude",
+      "left_knee_vel_x",
+      "left_knee_vel_y",
+      "left_knee_vel_magnitude",
+      "right_knee_vel_x",
+      "right_knee_vel_y",
+      "right_knee_vel_magnitude",
+      "left_ankle_vel_x",
+      "left_ankle_vel_y",
+      "left_ankle_vel_magnitude",
+      "right_ankle_vel_x",
+      "right_ankle_vel_y",
+      "right_ankle_vel_magnitude",
+      "shoulder_velocity_diff",
+      "hip_velocity_diff",
+      "ankle_velocity_ratio"
+    ],
+    "accelerations_computed": [
+      "nose_acceleration",
+      "left_shoulder_acceleration",
+      "right_shoulder_acceleration",
+      "left_hip_acceleration",
+      "right_hip_acceleration",
+      "left_knee_acceleration",
+      "right_knee_acceleration",
+      "left_ankle_acceleration",
+      "right_ankle_acceleration"
+    ],
+    "coordination_metrics": [
+      "shoulder_velocity_diff",
+      "hip_velocity_diff",
+      "leg_coordination",
+      "knee_angle_symmetry"
+    ],
+    "total_biomechanical_features": 21
+  },
+  "training_info": {
+    "dataset_size": 15995,
+    "features_used": 104,
+    "train_size": 12796,
+    "test_size": 3199,
+    "classes": [
+      "sit_down",
+      "stand_up",
+      "turning",
+      "walk_backward",
+      "walk_forward"
+    ],
+    "cv_folds": 3,
+    "all_models_optimized": true
+  },
+  "optimization_results": {
+    "Random Forest": {
+      "best_params": {
+        "max_depth": 20,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "n_estimators": 50
+      },
+      "test_accuracy": 1.0,
+      "test_f1": 1.0,
+      "improvement": 0.0006251953735542104,
+      "training_time": 108.97956895828247
+    },
+    "SVM (RBF)": {
+      "best_params": {
+        "C": 5.0,
+        "gamma": 0.01,
+        "kernel": "rbf"
+      },
+      "test_accuracy": 0.9434198186933417,
+      "test_f1": 0.943316885614058,
+      "improvement": 0.03251015942482027,
+      "training_time": 890.0704333782196
+    },
+    "k-NN": {
+      "best_params": {
+        "metric": "manhattan",
+        "n_neighbors": 3,
+        "weights": "distance"
+      },
+      "test_accuracy": 0.9406064395123476,
+      "test_f1": 0.9407254443958132,
+      "improvement": 0.05720537668021253,
+      "training_time": 26.03006887435913
+    },
+    "XGBoost": {
+      "best_params": {
+        "learning_rate": 0.2,
+        "max_depth": 7,
+        "n_estimators": 100,
+        "subsample": 0.8
+      },
+      "test_accuracy": 0.9993748046264458,
+      "test_f1": 0.9993748046264458,
+      "improvement": 0.01062832135042202,
+      "training_time": 256.0764365196228
+    }
+  },
+  "final_model_selection": {
+    "selected_model": "Random Forest",
+    "selection_criteria": "highest_test_accuracy",
+    "final_parameters": {
+      "max_depth": 20,
+      "min_samples_leaf": 1,
+      "min_samples_split": 2,
+      "n_estimators": 50
+    }
+  },
+  "performance_analysis": {
+    "confusion_matrix": [
+      [
+        620,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        609,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        644,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        619,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        707
+      ]
+    ],
+    "classification_report": {
+      "sit_down": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 620.0
+      },
+      "stand_up": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 609.0
+      },
+      "turning": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 644.0
+      },
+      "walk_backward": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 619.0
+      },
+      "walk_forward": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 707.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3199.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3199.0
+      }
+    },
+    "convergence_gap": 0.0021099794498224966,
+    "convergence_status": "✅ Excelente convergencia"
+  },
+  "feature_importance": [
+    {
+      "feature": "right_heel_v",
+      "importance": 0.06053165463875392,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_heel_v",
+      "importance": 0.055837776701785496,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_ankle_y",
+      "importance": 0.04296010376119681,
+      "category": "Básicas"
+    },
+    {
+      "feature": "nose_v",
+      "importance": 0.034655145983995,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_heel_y",
+      "importance": 0.031216774679474688,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_ankle_y",
+      "importance": 0.029805515872425855,
+      "category": "Básicas"
+    },
+    {
+      "feature": "torso_height",
+      "importance": 0.029791120645251006,
+      "category": "Distancias/Proporciones"
+    },
+    {
+      "feature": "shoulder_width",
+      "importance": 0.028814665229534738,
+      "category": "Distancias/Proporciones"
+    },
+    {
+      "feature": "right_wrist_x",
+      "importance": 0.026940702441337477,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_heel_y",
+      "importance": 0.025487927733265227,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_wrist_z",
+      "importance": 0.02443394437584367,
+      "category": "Básicas"
+    },
+    {
+      "feature": "upper_body_visibility",
+      "importance": 0.023512725487974832,
+      "category": "Visibilidad"
+    },
+    {
+      "feature": "nose_z",
+      "importance": 0.022797479705540545,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_knee_x",
+      "importance": 0.021936718083058606,
+      "category": "Básicas"
+    },
+    {
+      "feature": "hip_width",
+      "importance": 0.021470638085378427,
+      "category": "Distancias/Proporciones"
+    },
+    {
+      "feature": "right_shoulder_x",
+      "importance": 0.019777477547665224,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_wrist_v",
+      "importance": 0.0186289883914598,
+      "category": "Básicas"
+    },
+    {
+      "feature": "visibility_stability",
+      "importance": 0.018594362105432184,
+      "category": "Visibilidad"
+    },
+    {
+      "feature": "right_wrist_z",
+      "importance": 0.01831808476470825,
+      "category": "Básicas"
+    },
+    {
+      "feature": "lower_body_visibility",
+      "importance": 0.01652212363742207,
+      "category": "Visibilidad"
+    },
+    {
+      "feature": "left_knee_v",
+      "importance": 0.016338615089904144,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_heel_x",
+      "importance": 0.015831404726148045,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_ankle_x",
+      "importance": 0.015631938557340866,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_knee_z",
+      "importance": 0.015619481180516976,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_hip_v",
+      "importance": 0.015440949078720479,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_ankle_v",
+      "importance": 0.014605738378130603,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_shoulder_y",
+      "importance": 0.01296867987905195,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_knee_z",
+      "importance": 0.012788017674876563,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_hip_v",
+      "importance": 0.012761640472127307,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_knee_y",
+      "importance": 0.012537057951481814,
+      "category": "Básicas"
+    },
+    {
+      "feature": "nose_y",
+      "importance": 0.011862627808642381,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_knee_y",
+      "importance": 0.011215103272171763,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_hip_x",
+      "importance": 0.011101364755995064,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_heel_z",
+      "importance": 0.01079377572846989,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_wrist_x",
+      "importance": 0.010473552333834733,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_shoulder_z",
+      "importance": 0.010149650891730987,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_ankle_x",
+      "importance": 0.010119786186501252,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_ankle_v",
+      "importance": 0.010080445897297721,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_shoulder_z",
+      "importance": 0.009981324203984164,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_shoulder_v",
+      "importance": 0.00959257451659816,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_heel_x",
+      "importance": 0.009475153437546385,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_shoulder_v",
+      "importance": 0.009471896037859001,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_hip_y",
+      "importance": 0.00940109825009941,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_ankle_z",
+      "importance": 0.009330904588923125,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_knee_x",
+      "importance": 0.009072702031365062,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_hip_z",
+      "importance": 0.009067284009406082,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_shoulder_x",
+      "importance": 0.009031446724869848,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_wrist_y",
+      "importance": 0.008499883570086613,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_knee_v",
+      "importance": 0.008300559172782516,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_wrist_v",
+      "importance": 0.008030437577612948,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_shoulder_y",
+      "importance": 0.007974525023931553,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_hip_z",
+      "importance": 0.007511533527148263,
+      "category": "Básicas"
+    },
+    {
+      "feature": "hip_center_y",
+      "importance": 0.0067572671874350475,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_hip_x",
+      "importance": 0.006381827338584051,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_wrist_y",
+      "importance": 0.006181878034569987,
+      "category": "Básicas"
+    },
+    {
+      "feature": "nose_x",
+      "importance": 0.005994652216220637,
+      "category": "Básicas"
+    },
+    {
+      "feature": "angle_left_knee",
+      "importance": 0.005782032832813124,
+      "category": "Ángulos/Geometría"
+    },
+    {
+      "feature": "right_hip_y",
+      "importance": 0.0054788926229496285,
+      "category": "Básicas"
+    },
+    {
+      "feature": "left_heel_z",
+      "importance": 0.005432727070288472,
+      "category": "Básicas"
+    },
+    {
+      "feature": "right_ankle_z",
+      "importance": 0.0036987827002425383,
+      "category": "Básicas"
+    },
+    {
+      "feature": "angle_right_knee",
+      "importance": 0.0035590965053163303,
+      "category": "Ángulos/Geometría"
+    },
+    {
+      "feature": "right_ankle_vel_y",
+      "importance": 0.002801698243261695,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "trunk_inclination",
+      "importance": 0.002259206147844737,
+      "category": "Ángulos/Geometría"
+    },
+    {
+      "feature": "knee_angle_symmetry",
+      "importance": 0.0019150554165675263,
+      "category": "Ángulos/Geometría"
+    },
+    {
+      "feature": "right_knee_vel_y",
+      "importance": 0.0012201192445955155,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_ankle_vel_magnitude",
+      "importance": 0.0010182647213362102,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_shoulder_vel_y",
+      "importance": 0.0006908403375672965,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_knee_vel_magnitude",
+      "importance": 0.0006402038586684675,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_hip_vel_y",
+      "importance": 0.0005725986222164997,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_knee_vel_x",
+      "importance": 0.0005560975621144721,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "nose_vel_y",
+      "importance": 0.0005492029349712591,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_shoulder_vel_y",
+      "importance": 0.0005300281714462358,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "hip_velocity_diff",
+      "importance": 0.0005199491410419192,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "shoulder_velocity_diff",
+      "importance": 0.00048513434046695077,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_knee_vel_x",
+      "importance": 0.00048162477450372027,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_shoulder_vel_x",
+      "importance": 0.00047064414515273,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_ankle_vel_y",
+      "importance": 0.0004593270728628157,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_ankle_vel_x",
+      "importance": 0.0004554503574440675,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "nose_vel_x",
+      "importance": 0.0004303529836003303,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_hip_vel_x",
+      "importance": 0.0004289497798427013,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_shoulder_vel_x",
+      "importance": 0.0004265319842794779,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_hip_vel_y",
+      "importance": 0.00040313681938264736,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_hip_vel_x",
+      "importance": 0.00039645501913432947,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "ankle_velocity_ratio",
+      "importance": 0.00036834439321022,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "leg_coordination",
+      "importance": 0.0003592639510949986,
+      "category": "Coordinación/Simetría"
+    },
+    {
+      "feature": "hip_height_change",
+      "importance": 0.0003534393798373119,
+      "category": "Distancias/Proporciones"
+    },
+    {
+      "feature": "right_shoulder_vel_magnitude",
+      "importance": 0.00035267134051488944,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_hip_vel_magnitude",
+      "importance": 0.0003481592447076412,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "nose_vel_magnitude",
+      "importance": 0.0003478593921793703,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_ankle_acceleration",
+      "importance": 0.0003407771890329681,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "left_knee_vel_y",
+      "importance": 0.00033683134207396367,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_shoulder_vel_magnitude",
+      "importance": 0.00032780940647026357,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_knee_vel_magnitude",
+      "importance": 0.0003087726836025662,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_hip_vel_magnitude",
+      "importance": 0.00029191801502125264,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "left_ankle_vel_x",
+      "importance": 0.000278513027528751,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_ankle_vel_magnitude",
+      "importance": 0.0002748128323294354,
+      "category": "Velocidades"
+    },
+    {
+      "feature": "right_knee_acceleration",
+      "importance": 0.00025741295535725744,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "left_hip_acceleration",
+      "importance": 0.0002524575957627008,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "nose_acceleration",
+      "importance": 0.00023205512586094973,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "left_ankle_acceleration",
+      "importance": 0.000221895839862015,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "left_shoulder_acceleration",
+      "importance": 0.00018864945307625147,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "right_shoulder_acceleration",
+      "importance": 0.00017399602867187455,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "left_knee_acceleration",
+      "importance": 0.00016098833610349165,
+      "category": "Aceleraciones"
+    },
+    {
+      "feature": "right_hip_acceleration",
+      "importance": 0.00015026187432091927,
+      "category": "Aceleraciones"
+    }
+  ],
+  "feature_info": {
+    "selected_features": [
+      "nose_x",
+      "nose_y",
+      "nose_z",
+      "nose_v",
+      "left_shoulder_x",
+      "left_shoulder_y",
+      "left_shoulder_z",
+      "left_shoulder_v",
+      "right_shoulder_x",
+      "right_shoulder_y",
+      "right_shoulder_z",
+      "right_shoulder_v",
+      "left_wrist_x",
+      "left_wrist_y",
+      "left_wrist_z",
+      "left_wrist_v",
+      "right_wrist_x",
+      "right_wrist_y",
+      "right_wrist_z",
+      "right_wrist_v",
+      "left_hip_x",
+      "left_hip_y",
+      "left_hip_z",
+      "left_hip_v",
+      "right_hip_x",
+      "right_hip_y",
+      "right_hip_z",
+      "right_hip_v",
+      "left_knee_x",
+      "left_knee_y",
+      "left_knee_z",
+      "left_knee_v",
+      "right_knee_x",
+      "right_knee_y",
+      "right_knee_z",
+      "right_knee_v",
+      "left_ankle_x",
+      "left_ankle_y",
+      "left_ankle_z",
+      "left_ankle_v",
+      "right_ankle_x",
+      "right_ankle_y",
+      "right_ankle_z",
+      "right_ankle_v",
+      "left_heel_x",
+      "left_heel_y",
+      "left_heel_z",
+      "left_heel_v",
+      "right_heel_x",
+      "right_heel_y",
+      "right_heel_z",
+      "right_heel_v",
+      "angle_left_knee",
+      "angle_right_knee",
+      "trunk_inclination",
+      "shoulder_width",
+      "hip_width",
+      "torso_height",
+      "nose_vel_x",
+      "nose_vel_y",
+      "nose_vel_magnitude",
+      "left_shoulder_vel_x",
+      "left_shoulder_vel_y",
+      "left_shoulder_vel_magnitude",
+      "right_shoulder_vel_x",
+      "right_shoulder_vel_y",
+      "right_shoulder_vel_magnitude",
+      "left_hip_vel_x",
+      "left_hip_vel_y",
+      "left_hip_vel_magnitude",
+      "right_hip_vel_x",
+      "right_hip_vel_y",
+      "right_hip_vel_magnitude",
+      "left_knee_vel_x",
+      "left_knee_vel_y",
+      "left_knee_vel_magnitude",
+      "right_knee_vel_x",
+      "right_knee_vel_y",
+      "right_knee_vel_magnitude",
+      "left_ankle_vel_x",
+      "left_ankle_vel_y",
+      "left_ankle_vel_magnitude",
+      "right_ankle_vel_x",
+      "right_ankle_vel_y",
+      "right_ankle_vel_magnitude",
+      "nose_acceleration",
+      "left_shoulder_acceleration",
+      "right_shoulder_acceleration",
+      "left_hip_acceleration",
+      "right_hip_acceleration",
+      "left_knee_acceleration",
+      "right_knee_acceleration",
+      "left_ankle_acceleration",
+      "right_ankle_acceleration",
+      "shoulder_velocity_diff",
+      "hip_velocity_diff",
+      "hip_center_y",
+      "hip_height_change",
+      "ankle_velocity_ratio",
+      "leg_coordination",
+      "knee_angle_symmetry",
+      "upper_body_visibility",
+      "lower_body_visibility",
+      "visibility_stability"
+    ],
+    "total_features_original": 104,
+    "features_after_selection": 104,
+    "feature_engineering_applied": [
+      "biomechanical_angles",
+      "joint_velocities",
+      "joint_accelerations",
+      "body_proportions",
+      "movement_coordination",
+      "postural_stability"
+    ]
+  },
+  "files": {
+    "model": "motion_classifier_random_forest_v1.0.joblib",
+    "scaler": "scaler_v1.0.joblib",
+    "label_encoder": "label_encoder_v1.0.joblib",
+    "metadata": "metadata_v1.0.json"
+  }
+}

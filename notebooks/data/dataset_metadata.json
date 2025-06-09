@@ -1,0 +1,80 @@
+{
+  "dataset_info": {
+    "name": "Human Motion Classification Dataset - Processed",
+    "creation_date": "2025-06-09 01:47:34",
+    "original_frames": 16053,
+    "processed_frames": 15995,
+    "reduction_percentage": "0.36%",
+    "memory_optimization": "55.9%"
+  },
+  "structure": {
+    "total_columns": 54,
+    "landmark_names": [
+      "left_wrist",
+      "left_hip",
+      "left_knee",
+      "right_shoulder",
+      "right_heel",
+      "right_wrist",
+      "left_heel",
+      "left_shoulder",
+      "right_ankle",
+      "left_ankle",
+      "nose",
+      "right_knee",
+      "right_hip"
+    ],
+    "coordinate_columns": 39,
+    "visibility_columns": 13,
+    "movements": [
+      "sit_down",
+      "stand_up",
+      "turning",
+      "walk_backward",
+      "walk_forward"
+    ],
+    "frame_range": [
+      0,
+      174
+    ]
+  },
+  "processing_steps": {
+    "duplicates_removed": "26",
+    "frames_removed_low_quality": 32,
+    "values_interpolated": "0",
+    "visibility_filled": "0",
+    "outliers_treated": "651",
+    "data_types_optimized": true
+  },
+  "quality_metrics": {
+    "null_percentage_final": 0.0,
+    "balance_ratio": 0.8605769230769231,
+    "movements_distribution": {
+      "walk_forward": 3536,
+      "turning": 3220,
+      "sit_down": 3102,
+      "walk_backward": 3094,
+      "stand_up": 3043
+    },
+    "average_visibility": 0.9459438323974609
+  },
+  "pca_analysis": {
+    "variance_explained_3_components": 0.7009746369953953,
+    "separability_assessment": "Good"
+  },
+  "recommendations": {
+    "normalization": "Apply StandardScaler or MinMaxScaler to coordinate features",
+    "feature_engineering": [
+      "Calculate distances between key landmarks",
+      "Compute velocities between consecutive frames",
+      "Create angle features between joints"
+    ],
+    "algorithms": [
+      "Random Forest (robust to remaining NaNs)",
+      "XGBoost/LightGBM (excellent for tabular data)",
+      "LSTM/GRU (for temporal patterns)",
+      "SVM with RBF kernel"
+    ],
+    "validation": "Use stratified cross-validation, consider temporal splits for sequences"
+  }
+}
