@@ -13,6 +13,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
+import urllib.parse
 
 # Configuración del servidor
 PORT = 8000
@@ -28,6 +29,30 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Cross-Origin-Embedder-Policy", "require-corp")
         self.send_header("Cross-Origin-Opener-Policy", "same-origin")
         super().end_headers()
+
+    def do_GET(self):
+        """Manejar peticiones GET con rutas personalizadas."""
+        parsed_path = urllib.parse.urlparse(self.path)
+        path = parsed_path.path
+        
+        # Redirigir la raíz al archivo index.html
+        if path == "/" or path == "/index.html":
+            self.path = "/templates/index.html"
+        
+        # Manejar archivos estáticos CSS
+        elif path.startswith("/static/css/"):
+            # Ya está en la ruta correcta
+            pass
+        
+        # Manejar archivos estáticos JS
+        elif path.startswith("/static/js/"):
+            # Ya está en la ruta correcta
+            pass
+        
+        # Para otras rutas, usar el comportamiento por defecto
+        
+        # Llamar al método padre
+        super().do_GET()
 
     def guess_type(self, path):
         """Determinar el tipo MIME del archivo."""
@@ -76,6 +101,15 @@ def start_server():
         os.chdir(project_root)
 
         print("🚀 Iniciando servidores...")
+
+        # Verificar que existen los archivos necesarios
+        if not Path("templates/index.html").exists():
+            print("❌ Error: No se encontró templates/index.html")
+            return
+        
+        if not Path("static").exists():
+            print("❌ Error: No se encontró la carpeta static")
+            return
 
         # Iniciar la API del modelo en un hilo separado
         model_thread = threading.Thread(target=start_model_api, daemon=True)

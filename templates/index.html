@@ -8,7 +8,7 @@
       name="description"
       content="Aplicación de inteligencia artificial para la detección y clasificación de movimientos corporales en tiempo real usando MediaPipe"
     />
-    <link rel="stylesheet" href="../static/css/styles.css" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
     <!-- Iconos de Lucide -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
@@ -16,7 +16,10 @@
     <div class="container">
       <header>
         <h1>Clasificador de Movimientos Corporales</h1>
-        <p>Detección y análisis de poses en tiempo real con Inteligencia Artificial</p>
+        <p>
+          Detección y análisis de poses en tiempo real con Inteligencia
+          Artificial
+        </p>
         <div class="header-badge">
           <span>Powered by MediaPipe + TensorFlow</span>
         </div>
@@ -119,7 +122,10 @@
     </div>
 
     <!-- MediaPipe -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
       crossorigin="anonymous"
@@ -128,16 +134,19 @@
       src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"
+      crossorigin="anonymous"
+    ></script>
 
     <!-- Script principal -->
-    <script src="../static/js/script.js"></script>
+    <script src="/static/js/script.js"></script>
 
     <!-- Inicializar iconos -->
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        lucide.createIcons()
-      })
+      document.addEventListener("DOMContentLoaded", function () {
+        lucide.createIcons();
+      });
     </script>
   </body>
 </html>
