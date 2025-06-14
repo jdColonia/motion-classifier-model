@@ -9,6 +9,7 @@
 ## Videos 💾
 
 ### [Data](https://icesiedu-my.sharepoint.com/:f:/g/personal/1105929455_u_icesi_edu_co/EnzCUqohRKJHkpldjByJuBMBwwkLNHv5qPzTzO7s-tlBMw?e=tvTkC7)
+### [VIDEO ENTREGA FINAL](https://youtu.be/SNKNpLQFeQM?si=_RpunJn91Sn-Qgyc)
 
 ## 📋 Descripción
 
@@ -223,7 +224,3 @@ Para contribuir al proyecto:
 2. Crea una rama para tu feature
 3. Realiza tus cambios
 4. Envía un pull request
-
-## 📄 Licencia
-
-Este proyecto está bajo licencia MIT. Ver archivo LICENSE para más detalles.
