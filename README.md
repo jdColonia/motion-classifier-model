@@ -1,12 +1,13 @@
 # Motion Classifier Model 🤖
 
-## Authors ✒️
+## Autores ✒️
 
 > - Juan David Colonia Aldana - A00395956
 > - Miguel Angel Gonzalez Arango - A00395687
 > - Pablo Fernando Pineda Patiño - A00395831
 
-## Data collected 💾
+## Videos 💾
+
 ### [Data](https://icesiedu-my.sharepoint.com/:f:/g/personal/1105929455_u_icesi_edu_co/EnzCUqohRKJHkpldjByJuBMBwwkLNHv5qPzTzO7s-tlBMw?e=tvTkC7)
 
 ## 📋 Descripción
@@ -38,11 +39,13 @@ Esta aplicación web integra detección de poses en tiempo real con clasificaci�
 ## 🚀 Inicio Rápido
 
 ### Opción 1: Script Automático (Recomendado)
+
 ```bash
 python start.py
 ```
 
 ### Opción 2: Manual
+
 ```bash
 # 1. Instalar dependencias
 pip install -r requirements.txt
@@ -88,17 +91,20 @@ motion-classifier-model/
 ## 🎯 Funcionalidades
 
 ### ✅ Detección de Poses
+
 - **MediaPipe Pose**: Detección de 33 landmarks corporales
 - **Tiempo Real**: Procesamiento en vivo desde la cámara web
 - **Visualización**: Landmarks y conexiones superpuestas
 
 ### 🤖 Clasificación de Movimientos
-- **Modelo XGBoost**: Entrenado con features geométricas avanzadas
+
+- **Modelo**: Entrenado con features geométricas avanzadas
 - **Features Engineered**: Ángulos, distancias, proporciones corporales
 - **Predicción en Tiempo Real**: Clasificación cada 500ms
 - **Confianza Visual**: Barra de confianza con colores
 
 ### 🎨 Interfaz de Usuario
+
 - **Diseño Moderno**: UI responsiva y atractiva
 - **Estados Visuales**: Indicadores de estado del modelo y cámara
 - **Controles Intuitivos**: Botones para iniciar/detener
@@ -107,6 +113,7 @@ motion-classifier-model/
 ## 🔧 Configuración Técnica
 
 ### Dependencias Principales
+
 ```
 mediapipe          # Detección de poses
 opencv-python      # Procesamiento de video
@@ -119,10 +126,12 @@ numpy             # Operaciones numéricas
 ```
 
 ### Puertos Utilizados
+
 - **8000**: Servidor web principal (HTML/CSS/JS)
 - **5000**: API del modelo de clasificación
 
 ### Endpoints de la API
+
 ```
 GET  /health       # Estado del servidor y modelo
 POST /predict      # Clasificar movimiento desde landmarks
@@ -155,43 +164,22 @@ GET  /model-info   # Información detallada del modelo
 ## 🔍 Indicadores Visuales
 
 ### Estados del Modelo
+
 - ✅ **Verde**: Modelo cargado y funcionando
 - ❌ **Rojo**: Modelo no disponible
 - ⚠️ **Amarillo**: Verificando estado
 
 ### Confianza de Predicción
+
 - 🟢 **Verde** (>80%): Alta confianza
-- 🟡 **Amarillo** (60-80%): Confianza media  
+- 🟡 **Amarillo** (60-80%): Confianza media
 - 🟠 **Naranja** (<60%): Baja confianza
 
 ### Estados de la Cámara
+
 - 🔴 **Desconectado**: Cámara no iniciada
 - 🟢 **Conectado**: Cámara activa y funcionando
 - ⚠️ **Error**: Problema de acceso a cámara
-
-## 🛠️ Solución de Problemas
-
-### Modelo No Disponible
-```bash
-# Verificar que existe el directorio de modelos
-ls notebooks/models/
-
-# Si no existe, ejecutar el notebook de entrenamiento
-jupyter notebook notebooks/model_training.ipynb
-```
-
-### Error de Cámara
-- Verificar permisos del navegador
-- Usar HTTPS en producción
-- Comprobar que no hay otras apps usando la cámara
-
-### Puerto en Uso
-```bash
-# Cambiar puerto en server.py línea: PORT = 8000
-# O matar proceso existente:
-netstat -ano | findstr :8000  # Windows
-lsof -ti:8000 | xargs kill    # Linux/Mac
-```
 
 ## 🔄 Flujo de Datos
 
@@ -204,7 +192,7 @@ graph TD
     E --> F[Clasificación XGBoost]
     F --> G[Resultado + Confianza]
     G --> H[Visualización Canvas]
-    
+
     I[Servidor Web :8000] --> J[HTML/CSS/JS]
     K[API Modelo :5000] --> L[Flask + ML Pipeline]
 ```
@@ -230,6 +218,7 @@ graph TD
 ## 🤝 Contribución
 
 Para contribuir al proyecto:
+
 1. Fork el repositorio
 2. Crea una rama para tu feature
 3. Realiza tus cambios
@@ -237,4 +226,4 @@ Para contribuir al proyecto:
 
 ## 📄 Licencia
 
-Este proyecto está bajo licencia MIT. Ver archivo LICENSE para más detalles. 
+Este proyecto está bajo licencia MIT. Ver archivo LICENSE para más detalles.
